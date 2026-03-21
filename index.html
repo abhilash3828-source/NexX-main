@@ -1061,7 +1061,7 @@
                             </div>
                             <div class="detail-card">
                                 <div class="detail-label">Slots</div>
-                                <div class="detail-value" id="freefire-slots">0 / 50</div>
+                                <div class="detail-value">1 / 50</div>
                             </div>
                         </div>
                         <div class="tournament-footer">
@@ -1530,8 +1530,8 @@
 
         // Add click handlers to register buttons
         document.addEventListener('DOMContentLoaded', async function() {
-            // Load and display tournaments
-            await loadTournaments();
+            // Do NOT load tournaments automatically - keep slots manual
+            // await loadTournaments();
 
             // Find all register buttons and add click handlers
             document.querySelectorAll('.tournament-btn.register, a[href="#register"]').forEach(btn => {
@@ -1541,8 +1541,8 @@
                 });
             });
 
-            // Update slot counts on page load
-            updateSlotCounts();
+            // Do NOT update slot counts automatically
+            // updateSlotCounts();
         });
 
         async function loadTournaments() {

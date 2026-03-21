@@ -1061,7 +1061,7 @@
                             </div>
                             <div class="detail-card">
                                 <div class="detail-label">Slots</div>
-                                <div class="detail-value">3 / 50</div>
+                                <div class="detail-value">3/ 50</div>
                             </div>
                         </div>
                         <div class="tournament-footer">
@@ -1478,10 +1478,42 @@
             try {
                 // Store registration locally
                 await saveRegistration(formData);
+
+                // Send to Google Sheets
+                await sendToGoogleSheets(formData);
+
                 showSuccess();
             } catch (error) {
                 console.error('Failed to register:', error);
                 alert('Failed to register. Please try again.');
+            }
+        }
+
+        const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxWOaJ5T7sWZpiQ62amwyTl9Xh6EzHxddupYf9iRACGvQRenrnxy5wv2Yx3rS12IX3r4A/exec'; // e.g. https://script.google.com/macros/s/XXX/exec
+
+        async function sendToGoogleSheets(registration) {
+            if (!GOOGLE_SHEETS_WEBHOOK_URL || GOOGLE_SHEETS_WEBHOOK_URL.includes('PASTE_YOUR_GAS_WEB_APP_URL_HERE')) {
+                console.warn('Google Sheets webhook URL not configured. Skipping push to Sheets.');
+                return;
+            }
+
+            try {
+                const response = await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(registration)
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Google Sheets API response status ${response.status}`);
+                }
+
+                const result = await response.json();
+                console.log('Google Sheets update response:', result);
+            } catch (error) {
+                console.error('Failed to send registration to Google Sheets:', error);
             }
         }
 

@@ -1,0 +1,1673 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Portal | NEXX Esports</title>
+    <style>
+        /* Login Modal */
+        .login-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--background);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .login-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem;
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .login-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .login-subtitle {
+            color: var(--muted);
+            margin-bottom: 2rem;
+        }
+
+        .login-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--text);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+        }
+
+        .login-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 209, 255, 0.2);
+        }
+
+        .login-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 2rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 0.5rem;
+        }
+
+        .login-btn:hover {
+            background: var(--primary-2);
+        }
+
+        .login-error {
+            color: #ef4444;
+            font-size: 0.875rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        /* Hide main content initially */
+        .main-content {
+            display: none;
+        }
+
+        .main-content.show {
+            display: block;
+        }
+        :root {
+            --background: #05060c;
+            --surface: #0d1120;
+            --surface-2: #121a2b;
+            --text: #e6efff;
+            --muted: rgba(255, 255, 255, 0.68);
+            --primary: #00d1ff;
+            --primary-2: #53e8ff;
+            --border: rgba(255, 255, 255, 0.12);
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header */
+        .header {
+            background: rgba(0, 0, 0, 0.8);
+            border-bottom: 1px solid var(--border);
+            padding: 1rem 0;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .logout-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-size: 0.875rem;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+
+        /* Dashboard */
+        .dashboard {
+            padding: 2rem 0;
+        }
+
+        .dashboard-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .dashboard-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .dashboard-subtitle {
+            color: var(--muted);
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--muted);
+            font-size: 0.875rem;
+        }
+
+        /* Content Grid */
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 2rem;
+        }
+
+        /* Registrations Table */
+        .registrations-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .table-container {
+            overflow-x: auto;
+        }
+
+        .registrations-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .registrations-table th,
+        .registrations-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .registrations-table th {
+            background: var(--surface-2);
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .registrations-table td {
+            color: var(--muted);
+        }
+
+        .status-badge {
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background: var(--warning);
+            color: white;
+        }
+
+        .status-paid {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-pending {
+            background: var(--warning);
+            color: white;
+        }
+
+        .status-approved {
+            background: var(--success);
+            color: white;
+        }
+
+        .status-rejected {
+            background: var(--danger);
+            color: white;
+        }
+
+        .export-section {
+            margin-bottom: 1rem;
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .filter-select {
+            padding: 0.5rem;
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            background: var(--surface-2);
+            color: var(--text);
+            font-size: 0.875rem;
+        }
+
+        .export-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .data-warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .data-warning h4 {
+            color: #f59e0b;
+            font-size: 0.875rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .data-warning p {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .backup-btn {
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            margin-right: 0.5rem;
+        }
+
+        .backup-btn:hover {
+            background: rgba(245, 158, 11, 0.3);
+        }
+
+        .approve-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        .reject-btn {
+            background: var(--danger);
+            color: white;
+            border: none;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+        }
+
+        /* Quick Actions */
+        .actions-section {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+        }
+
+        .action-btn {
+            display: block;
+            width: 100%;
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            margin-bottom: 0.5rem;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            background: var(--primary-2);
+        }
+
+        /* Tournament Management */
+        .tournament-management {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .tournament-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .create-tournament-btn {
+            background: linear-gradient(135deg, var(--primary), var(--primary-2));
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .create-tournament-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 209, 255, 0.3);
+        }
+
+        .tournament-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1rem;
+        }
+
+        .tournament-card {
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 0.75rem;
+            padding: 1.5rem;
+            position: relative;
+        }
+
+        .tournament-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+
+        .tournament-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.25rem;
+        }
+
+        .tournament-id {
+            font-size: 0.75rem;
+            color: var(--muted);
+            font-family: monospace;
+        }
+
+        .tournament-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .tournament-action-btn {
+            padding: 0.25rem 0.5rem;
+            border: none;
+            border-radius: 0.25rem;
+            font-size: 0.75rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .edit-btn {
+            background: rgba(59, 130, 246, 0.1);
+            color: #3b82f6;
+        }
+
+        .edit-btn:hover {
+            background: rgba(59, 130, 246, 0.2);
+        }
+
+        .delete-btn {
+            background: rgba(239, 68, 68, 0.1);
+            color: #ef4444;
+        }
+
+        .delete-btn:hover {
+            background: rgba(239, 68, 68, 0.2);
+        }
+
+        .tournament-details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .tournament-detail {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.75rem;
+            color: var(--muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            font-size: 0.875rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .tournament-stats {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .registration-count {
+            font-size: 0.875rem;
+            color: var(--muted);
+        }
+
+        .tournament-status {
+            padding: 0.25rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .status-active {
+            background: rgba(34, 197, 94, 0.1);
+            color: #22c55e;
+        }
+
+        .status-inactive {
+            background: rgba(156, 163, 175, 0.1);
+            color: #6b7280;
+        }
+
+        /* Tournament Modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 600px;
+            max-height: 90vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            color: var(--text);
+            font-size: 1.25rem;
+            font-weight: 600;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--muted);
+            cursor: pointer;
+            padding: 0;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.25rem;
+        }
+
+        .close-btn:hover {
+            background: var(--surface-2);
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--text);
+            font-size: 0.875rem;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 209, 255, 0.1);
+        }
+
+        .form-hint {
+            display: block;
+            margin-top: 0.25rem;
+            font-size: 0.75rem;
+            color: var(--muted);
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+        }
+
+        .cancel-btn {
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .cancel-btn:hover {
+            background: var(--border);
+        }
+
+        .save-btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            cursor: pointer;
+            font-weight: 500;
+        }
+
+        .save-btn:hover {
+            background: var(--primary-2);
+        }
+
+        .action-btn.secondary {
+            background: var(--surface-2);
+            color: var(--text);
+        }
+
+        .action-btn.secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .header-content {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Login Modal -->
+    <div id="loginModal" class="login-modal">
+        <div class="login-content">
+            <h1 class="login-title">NEXX Admin Portal</h1>
+            <p class="login-subtitle">Enter the admin password to access the dashboard</p>
+            <input type="password" id="adminPassword" class="login-input" placeholder="Enter admin password" onkeypress="handleKeyPress(event)">
+            <button onclick="checkPassword()" class="login-btn">Access Admin Portal</button>
+            <div id="loginError" class="login-error">Incorrect password. Please try again.</div>
+        </div>
+    </div>
+
+    <!-- Tournament Modal -->
+    <div id="tournamentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="tournamentModalTitle">Create Tournament</h2>
+                <button onclick="closeTournamentModal()" class="close-btn">&times;</button>
+            </div>
+            <form id="tournamentForm" class="modal-body">
+                <div class="form-group">
+                    <label for="tournamentName">Tournament Name *</label>
+                    <input type="text" id="tournamentName" required placeholder="e.g., Free Fire Solo Championship">
+                </div>
+                <div class="form-group">
+                    <label for="tournamentId">Tournament ID *</label>
+                    <input type="text" id="tournamentId" required placeholder="e.g., freefire-solo" pattern="[a-z0-9-]+" title="Only lowercase letters, numbers, and hyphens allowed">
+                    <small class="form-hint">Unique identifier, no spaces or special characters except hyphens</small>
+                </div>
+                <div class="form-group">
+                    <label for="gameName">Game Name *</label>
+                    <input type="text" id="gameName" required placeholder="e.g., Free Fire">
+                </div>
+                <div class="form-group">
+                    <label for="maxSlots">Maximum Slots *</label>
+                    <input type="number" id="maxSlots" required min="1" max="1000" placeholder="e.g., 50">
+                </div>
+                <div class="form-group">
+                    <label for="entryFee">Entry Fee (₹) *</label>
+                    <input type="number" id="entryFee" required min="0" step="0.01" placeholder="e.g., 20">
+                </div>
+                <div class="form-group">
+                    <label for="startDate">Start Date *</label>
+                    <input type="datetime-local" id="startDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="endDate">End Date *</label>
+                    <input type="datetime-local" id="endDate" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea id="description" rows="3" placeholder="Tournament description and rules..."></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="tournamentStatus">Status</label>
+                    <select id="tournamentStatus">
+                        <option value="active">Active</option>
+                        <option value="inactive">Inactive</option>
+                        <option value="upcoming">Upcoming</option>
+                    </select>
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button onclick="closeTournamentModal()" class="cancel-btn">Cancel</button>
+                <button onclick="saveTournament()" class="save-btn">Save Tournament</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="mainContent" class="main-content">
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">NEXX Admin Portal</div>
+            <button class="logout-btn" onclick="logout()">Logout</button>
+        </div>
+    </header>
+
+    <!-- Dashboard -->
+    <main class="container dashboard">
+        <div class="dashboard-header">
+            <h1 class="dashboard-title">Tournament Dashboard</h1>
+            <p class="dashboard-subtitle">Manage registrations and monitor tournament activity</p>
+        </div>
+
+        <!-- Data Warning -->
+        <div class="data-warning">
+            <h4>✅ Permanent Storage Active</h4>
+            <p>Data is stored using IndexedDB and will persist until manually cleared. Regular backups are still recommended for safety.</p>
+            <div>
+                <button class="backup-btn" onclick="backupData()">📥 Backup Data</button>
+                <button class="backup-btn" onclick="restoreData()">📤 Restore Data</button>
+                <button class="backup-btn" onclick="clearAllData()">🗑️ Clear All Data</button>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-value">47</div>
+                <div class="stat-label">Total Registrations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">32</div>
+                <div class="stat-label">Paid Registrations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">15</div>
+                <div class="stat-label">Pending Payments</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value">₹7,400</div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+        </div>
+
+        <!-- Tournament Management -->
+        <div class="tournament-management">
+            <div class="tournament-header">
+                <h2 class="section-title">Tournament Management</h2>
+                <button onclick="openTournamentModal()" class="create-tournament-btn">
+                    ➕ Create Tournament
+                </button>
+            </div>
+
+            <div class="tournament-grid" id="tournamentGrid">
+                <!-- Tournaments will be loaded here -->
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="content-grid">
+            <!-- Registrations Table -->
+            <div class="registrations-section">
+                <h2 class="section-title">Recent Registrations</h2>
+
+                <!-- Export Section -->
+                <div class="export-section">
+                    <select id="tournamentFilter" class="filter-select" onchange="filterRegistrations()">
+                        <option value="all">All Tournaments</option>
+                        <option value="freefire-solo">Free Fire Solo</option>
+                    </select>
+                    <button onclick="exportToExcel()" class="export-btn">
+                        📊 Export to Excel
+                    </button>
+                </div>
+
+                <div class="table-container">
+                    <table class="registrations-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Game ID</th>
+                                <th>Tournament</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="registrationsTableBody">
+                            <!-- Registrations will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="actions-section">
+                <h2 class="section-title">Quick Actions</h2>
+                <a href="#export" class="action-btn">Export Registrations</a>
+                <a href="#tournament" class="action-btn">Create Tournament</a>
+                <a href="#announcement" class="action-btn">Send Announcement</a>
+                <button class="action-btn secondary" onclick="refreshData()">Refresh Data</button>
+                <button class="action-btn secondary" onclick="window.location.href='index.html'">Back to Website</button>
+            </div>
+        </div>
+    </main>
+    </div>
+
+    <script>
+        // IndexedDB for more persistent storage
+        class RegistrationDB {
+            constructor() {
+                this.dbName = 'NexxRegistrations';
+                this.version = 1;
+                this.storeName = 'registrations';
+                this.tournamentStoreName = 'tournaments';
+                this.db = null;
+            }
+
+            async init() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, this.version);
+
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => {
+                        this.db = request.result;
+                        resolve();
+                    };
+
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains(this.storeName)) {
+                            db.createObjectStore(this.storeName, { keyPath: 'id' });
+                        }
+                        if (!db.objectStoreNames.contains(this.tournamentStoreName)) {
+                            db.createObjectStore(this.tournamentStoreName, { keyPath: 'id' });
+                        }
+                    };
+                });
+            }
+
+            async saveRegistration(registration) {
+                if (!this.db) await this.init();
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readwrite');
+                    const store = transaction.objectStore(this.storeName);
+                    const request = store.put(registration);
+
+                    request.onsuccess = () => resolve();
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async getAllRegistrations() {
+                if (!this.db) await this.init();
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readonly');
+                    const store = transaction.objectStore(this.storeName);
+                    const request = store.getAll();
+
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async updateRegistration(id, updates) {
+                if (!this.db) await this.init();
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readwrite');
+                    const store = transaction.objectStore(this.storeName);
+
+                    const getRequest = store.get(id);
+                    getRequest.onsuccess = () => {
+                        const registration = getRequest.result;
+                        if (registration) {
+                            Object.assign(registration, updates);
+                            const putRequest = store.put(registration);
+                            putRequest.onsuccess = () => resolve();
+                            putRequest.onerror = () => reject(putRequest.error);
+                        } else {
+                            reject(new Error('Registration not found'));
+                        }
+                    };
+                    getRequest.onerror = () => reject(getRequest.error);
+                });
+            }
+
+            async clearAllData() {
+                if (!this.db) await this.init();
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readwrite');
+                    const store = transaction.objectStore(this.storeName);
+                    const request = store.clear();
+
+                    request.onsuccess = () => resolve();
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async exportData() {
+                const registrations = await this.getAllRegistrations();
+                return {
+                    registrations: JSON.stringify(registrations),
+                    backupDate: new Date().toISOString(),
+                    version: '1.0',
+                    storage: 'IndexedDB'
+                };
+            }
+
+            async importData(data) {
+                if (!this.db) await this.init();
+                const registrations = JSON.parse(data.registrations);
+
+                const transaction = this.db.transaction([this.storeName], 'readwrite');
+                const store = transaction.objectStore(this.storeName);
+
+                // Clear existing data
+                await new Promise((resolve, reject) => {
+                    const clearRequest = store.clear();
+                    clearRequest.onsuccess = () => resolve();
+                    clearRequest.onerror = () => reject(clearRequest.error);
+                });
+
+                // Import new data
+                for (const reg of registrations) {
+                    await new Promise((resolve, reject) => {
+                        const request = store.put(reg);
+                        request.onsuccess = () => resolve();
+                        request.onerror = () => reject(request.error);
+                    });
+                }
+            }
+
+            // Tournament management methods
+            async saveTournament(tournament) {
+                if (!this.db) await this.init();
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.tournamentStoreName], 'readwrite');
+                    const store = transaction.objectStore(this.tournamentStoreName);
+                    const request = store.put(tournament);
+
+                    request.onsuccess = () => resolve();
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async getAllTournaments() {
+                if (!this.db) await this.init();
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.tournamentStoreName], 'readonly');
+                    const store = transaction.objectStore(this.tournamentStoreName);
+                    const request = store.getAll();
+
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async getTournament(id) {
+                if (!this.db) await this.init();
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.tournamentStoreName], 'readonly');
+                    const store = transaction.objectStore(this.tournamentStoreName);
+                    const request = store.get(id);
+
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async updateTournament(id, updates) {
+                if (!this.db) await this.init();
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.tournamentStoreName], 'readwrite');
+                    const store = transaction.objectStore(this.tournamentStoreName);
+
+                    const getRequest = store.get(id);
+                    getRequest.onsuccess = () => {
+                        const tournament = getRequest.result;
+                        if (tournament) {
+                            Object.assign(tournament, updates);
+                            const putRequest = store.put(tournament);
+                            putRequest.onsuccess = () => resolve();
+                            putRequest.onerror = () => reject(putRequest.error);
+                        } else {
+                            reject(new Error('Tournament not found'));
+                        }
+                    };
+                    getRequest.onerror = () => reject(getRequest.error);
+                });
+            }
+
+            async deleteTournament(id) {
+                if (!this.db) await this.init();
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.tournamentStoreName], 'readwrite');
+                    const store = transaction.objectStore(this.tournamentStoreName);
+                    const request = store.delete(id);
+
+                    request.onsuccess = () => resolve();
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async exportTournamentData() {
+                const tournaments = await this.getAllTournaments();
+                const registrations = await this.getAllRegistrations();
+                return {
+                    tournaments: JSON.stringify(tournaments),
+                    registrations: JSON.stringify(registrations),
+                    backupDate: new Date().toISOString(),
+                    version: '1.0',
+                    storage: 'IndexedDB'
+                };
+            }
+        }
+
+        // Initialize database
+        const regDB = new RegistrationDB();
+        const ADMIN_PASSWORD = 'nexx admin';
+
+        // Tournament management variables
+        let editingTournamentId = null;
+
+        // Tournament Management Functions
+        async function openTournamentModal(tournamentId = null) {
+            const modal = document.getElementById('tournamentModal');
+            const form = document.getElementById('tournamentForm');
+            const title = document.getElementById('tournamentModalTitle');
+
+            if (tournamentId) {
+                // Edit mode
+                editingTournamentId = tournamentId;
+                title.textContent = 'Edit Tournament';
+                const tournament = await regDB.getTournament(tournamentId);
+                if (tournament) {
+                    populateTournamentForm(tournament);
+                }
+            } else {
+                // Create mode
+                editingTournamentId = null;
+                title.textContent = 'Create Tournament';
+                form.reset();
+                // Set default dates
+                const now = new Date();
+                const tomorrow = new Date(now);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+
+                document.getElementById('startDate').value = now.toISOString().slice(0, 16);
+                document.getElementById('endDate').value = tomorrow.toISOString().slice(0, 16);
+            }
+
+            modal.classList.add('show');
+        }
+
+        function closeTournamentModal() {
+            document.getElementById('tournamentModal').classList.remove('show');
+            editingTournamentId = null;
+        }
+
+        function populateTournamentForm(tournament) {
+            document.getElementById('tournamentName').value = tournament.name;
+            document.getElementById('tournamentId').value = tournament.id;
+            document.getElementById('gameName').value = tournament.gameName;
+            document.getElementById('maxSlots').value = tournament.maxSlots;
+            document.getElementById('entryFee').value = tournament.entryFee;
+            document.getElementById('startDate').value = new Date(tournament.startDate).toISOString().slice(0, 16);
+            document.getElementById('endDate').value = new Date(tournament.endDate).toISOString().slice(0, 16);
+            document.getElementById('description').value = tournament.description || '';
+            document.getElementById('tournamentStatus').value = tournament.status;
+        }
+
+        async function saveTournament() {
+            const form = document.getElementById('tournamentForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const tournamentData = {
+                id: document.getElementById('tournamentId').value,
+                name: document.getElementById('tournamentName').value,
+                gameName: document.getElementById('gameName').value,
+                maxSlots: parseInt(document.getElementById('maxSlots').value),
+                entryFee: parseFloat(document.getElementById('entryFee').value),
+                startDate: new Date(document.getElementById('startDate').value).toISOString(),
+                endDate: new Date(document.getElementById('endDate').value).toISOString(),
+                description: document.getElementById('description').value,
+                status: document.getElementById('tournamentStatus').value,
+                createdAt: editingTournamentId ? undefined : new Date().toISOString(),
+                updatedAt: new Date().toISOString()
+            };
+
+            try {
+                // Check if tournament ID already exists (for new tournaments)
+                if (!editingTournamentId) {
+                    const existing = await regDB.getTournament(tournamentData.id);
+                    if (existing) {
+                        alert('Tournament ID already exists. Please choose a different ID.');
+                        return;
+                    }
+                }
+
+                await regDB.saveTournament(tournamentData);
+                closeTournamentModal();
+                await loadTournaments();
+
+                // Update filter dropdown
+                await updateTournamentFilter();
+
+                // Notify main website
+                if (window.parent !== window) {
+                    window.parent.postMessage({ type: 'tournamentsUpdated' }, '*');
+                }
+
+                alert(editingTournamentId ? 'Tournament updated successfully!' : 'Tournament created successfully!');
+            } catch (error) {
+                console.error('Failed to save tournament:', error);
+                alert('Failed to save tournament. Please try again.');
+            }
+        }
+
+        async function loadTournaments() {
+            try {
+                const tournaments = await regDB.getAllTournaments();
+                const grid = document.getElementById('tournamentGrid');
+
+                if (tournaments.length === 0) {
+                    grid.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--muted);">No tournaments created yet. Click "Create Tournament" to add your first tournament.</div>';
+                    return;
+                }
+
+                grid.innerHTML = tournaments.map(tournament => `
+                    <div class="tournament-card">
+                        <div class="tournament-card-header">
+                            <div>
+                                <div class="tournament-name">${tournament.name}</div>
+                                <div class="tournament-id">${tournament.id}</div>
+                            </div>
+                            <div class="tournament-actions">
+                                <button onclick="openTournamentModal('${tournament.id}')" class="tournament-action-btn edit-btn">Edit</button>
+                                <button onclick="deleteTournament('${tournament.id}')" class="tournament-action-btn delete-btn">Delete</button>
+                            </div>
+                        </div>
+                        <div class="tournament-details">
+                            <div class="tournament-detail">
+                                <div class="detail-label">Game</div>
+                                <div class="detail-value">${tournament.gameName}</div>
+                            </div>
+                            <div class="tournament-detail">
+                                <div class="detail-label">Entry Fee</div>
+                                <div class="detail-value">₹${tournament.entryFee}</div>
+                            </div>
+                            <div class="tournament-detail">
+                                <div class="detail-label">Max Slots</div>
+                                <div class="detail-value">${tournament.maxSlots}</div>
+                            </div>
+                            <div class="tournament-detail">
+                                <div class="detail-label">Start Date</div>
+                                <div class="detail-value">${new Date(tournament.startDate).toLocaleDateString()}</div>
+                            </div>
+                        </div>
+                        <div class="tournament-stats">
+                            <div class="registration-count">
+                                ${getTournamentRegistrationCount(tournament.id)} registrations
+                            </div>
+                            <div class="tournament-status status-${tournament.status}">
+                                ${capitalize(tournament.status)}
+                            </div>
+                        </div>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load tournaments:', error);
+                document.getElementById('tournamentGrid').innerHTML = '<div style="text-align: center; padding: 2rem; color: #ef4444;">Error loading tournaments</div>';
+            }
+        }
+
+        async function deleteTournament(id) {
+            if (!confirm('Are you sure you want to delete this tournament? This will also delete all registrations for this tournament.')) {
+                return;
+            }
+
+            try {
+                await regDB.deleteTournament(id);
+                await loadTournaments();
+                await updateTournamentFilter();
+
+                // Notify main website
+                if (window.parent !== window) {
+                    window.parent.postMessage({ type: 'tournamentsUpdated' }, '*');
+                }
+
+                alert('Tournament deleted successfully!');
+            } catch (error) {
+                console.error('Failed to delete tournament:', error);
+                alert('Failed to delete tournament. Please try again.');
+            }
+        }
+
+        async function updateTournamentFilter() {
+            try {
+                const tournaments = await regDB.getAllTournaments();
+                const filterSelect = document.getElementById('tournamentFilter');
+
+                // Keep the current selection
+                const currentValue = filterSelect.value;
+
+                // Clear existing options except "All"
+                filterSelect.innerHTML = '<option value="all">All Tournaments</option>';
+
+                // Add tournament options
+                tournaments.forEach(tournament => {
+                    const option = document.createElement('option');
+                    option.value = tournament.id;
+                    option.textContent = tournament.name;
+                    filterSelect.appendChild(option);
+                });
+
+                // Restore selection if it still exists
+                if (currentValue && currentValue !== 'all') {
+                    const option = filterSelect.querySelector(`option[value="${currentValue}"]`);
+                    if (option) {
+                        filterSelect.value = currentValue;
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to update tournament filter:', error);
+            }
+        }
+
+        async function getTournamentRegistrationCount(tournamentId) {
+            try {
+                const registrations = await regDB.getAllRegistrations();
+                return registrations.filter(reg => reg.tournament === tournamentId).length;
+            } catch (error) {
+                console.error('Failed to get registration count:', error);
+                return 0;
+            }
+        }
+
+        function checkPassword() {
+            const password = document.getElementById('adminPassword').value;
+            const errorDiv = document.getElementById('loginError');
+
+            if (password === ADMIN_PASSWORD) {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('mainContent').classList.add('show');
+                // Store login status in session storage
+                sessionStorage.setItem('adminLoggedIn', 'true');
+            } else {
+                errorDiv.style.display = 'block';
+                document.getElementById('adminPassword').value = '';
+                document.getElementById('adminPassword').focus();
+            }
+        }
+
+        function handleKeyPress(event) {
+            if (event.key === 'Enter') {
+                checkPassword();
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('adminLoggedIn');
+            document.getElementById('mainContent').classList.remove('show');
+            document.getElementById('loginModal').style.display = 'flex';
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('loginError').style.display = 'none';
+        }
+
+        // Check if already logged in on page load
+        window.addEventListener('load', async function() {
+            if (sessionStorage.getItem('adminLoggedIn') === 'true') {
+                document.getElementById('loginModal').style.display = 'none';
+                document.getElementById('mainContent').classList.add('show');
+                await loadRegistrations();
+                await loadTournaments();
+                await updateStats();
+            }
+        });
+
+        async function loadRegistrations(filter = 'all') {
+            try {
+                const registrations = await regDB.getAllRegistrations();
+                const tbody = document.getElementById('registrationsTableBody');
+
+                // Filter registrations
+                const filteredRegistrations = filter === 'all' ?
+                    registrations :
+                    registrations.filter(reg => reg.tournament === filter);
+
+                if (filteredRegistrations.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem; color: var(--muted);">No registrations found</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = filteredRegistrations.map(reg => `
+                <tr>
+                    <td>${reg.fullName}</td>
+                    <td>${reg.gameId}</td>
+                    <td>${getTournamentName(reg.tournament)}</td>
+                    <td>₹${reg.amount}</td>
+                    <td><span class="status-badge status-${reg.status}">${capitalize(reg.status)}</span></td>
+                    <td>${new Date(reg.timestamp).toLocaleDateString()}</td>
+                    <td class="action-buttons">
+                        ${reg.status === 'pending' ?
+                            `<button class="approve-btn" onclick="approveRegistration('${reg.id}')">Approve</button>
+                             <button class="reject-btn" onclick="rejectRegistration('${reg.id}')">Reject</button>` :
+                            '<span style="color: var(--muted); font-size: 0.75rem;">Processed</span>'
+                        }
+                    </td>
+                </tr>
+            `).join('');
+            } catch (error) {
+                console.error('Failed to load registrations:', error);
+                const tbody = document.getElementById('registrationsTableBody');
+                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 2rem; color: #ef4444;">Error loading registrations. Please refresh the page.</td></tr>';
+            }
+        }
+
+        async function filterRegistrations() {
+            const filter = document.getElementById('tournamentFilter').value;
+            await loadRegistrations(filter);
+        }
+
+        async function exportToExcel() {
+            try {
+                const filter = document.getElementById('tournamentFilter').value;
+                const registrations = await regDB.getAllRegistrations();
+
+                // Filter registrations
+                const filteredRegistrations = filter === 'all' ?
+                    registrations :
+                    registrations.filter(reg => reg.tournament === filter);
+
+            if (filteredRegistrations.length === 0) {
+                alert('No registrations found to export');
+                return;
+            }
+
+            // Create CSV content
+            const csvContent = generateCSV(filteredRegistrations);
+
+            // Create and download file
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+
+            if (link.download !== undefined) {
+                const url = URL.createObjectURL(blob);
+                link.setAttribute('href', url);
+                const tournamentName = filter === 'all' ? 'All_Tournaments' : getTournamentName(filter).replace(/\s+/g, '_');
+                link.setAttribute('download', `NEXX_Registrations_${tournamentName}_${new Date().toISOString().split('T')[0]}.csv`);
+                link.style.visibility = 'hidden';
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            }
+            } catch (error) {
+                console.error('Failed to export data:', error);
+                alert('Failed to export data. Please try again.');
+            }
+        }
+
+        function generateCSV(registrations) {
+            // CSV Header
+            const headers = [
+                'Registration ID',
+                'Full Name',
+                'Email',
+                'Phone',
+                'Game ID',
+                'Tournament',
+                'Payment Method',
+                'UPI ID',
+                'Amount',
+                'Status',
+                'Registration Date'
+            ];
+
+            // CSV Rows
+            const rows = registrations.map(reg => [
+                reg.id,
+                `"${reg.fullName}"`,
+                `"${reg.email}"`,
+                `"${reg.phone}"`,
+                `"${reg.gameId}"`,
+                `"${getTournamentName(reg.tournament)}"`,
+                `"${reg.paymentMethod}"`,
+                `"${reg.upiId || ''}"`,
+                reg.amount,
+                `"${capitalize(reg.status)}"`,
+                `"${new Date(reg.timestamp).toLocaleString()}"`
+            ]);
+
+            // Combine headers and rows
+            const csvData = [headers, ...rows];
+
+            // Convert to CSV string
+            return csvData.map(row =>
+                row.map(field => field.toString()).join(',')
+            ).join('\n');
+        }
+
+        function approveRegistration(id) {
+            updateRegistrationStatus(id, 'approved');
+        }
+
+        function rejectRegistration(id) {
+            updateRegistrationStatus(id, 'rejected');
+        }
+
+        async function updateRegistrationStatus(id, status) {
+            try {
+                await regDB.updateRegistration(id, { status });
+
+                // Reload with current filter
+                const currentFilter = document.getElementById('tournamentFilter').value;
+                await loadRegistrations(currentFilter);
+                await updateStats();
+
+                // Notify main website to update slot counts
+                if (window.parent !== window) {
+                    window.parent.postMessage({ type: 'registrationUpdated' }, '*');
+                }
+            } catch (error) {
+                console.error('Failed to update registration status:', error);
+                alert('Failed to update registration status. Please try again.');
+            }
+        }
+
+        async function updateStats() {
+            try {
+                const registrations = await regDB.getAllRegistrations();
+
+                const total = registrations.length;
+                const approved = registrations.filter(reg => reg.status === 'approved').length;
+                const pending = registrations.filter(reg => reg.status === 'pending').length;
+                const revenue = approved * 20;
+
+                document.querySelector('.stat-card:nth-child(1) .stat-value').textContent = total;
+                document.querySelector('.stat-card:nth-child(2) .stat-value').textContent = approved;
+                document.querySelector('.stat-card:nth-child(3) .stat-value').textContent = pending;
+                document.querySelector('.stat-card:nth-child(4) .stat-value').textContent = `₹${revenue}`;
+            } catch (error) {
+                console.error('Failed to update stats:', error);
+            }
+        }
+
+        function getTournamentName(id) {
+            const names = {
+                'freefire-solo': 'Free Fire Solo'
+            };
+            return names[id] || id;
+        }
+
+        function capitalize(str) {
+            return str.charAt(0).toUpperCase() + str.slice(1);
+        }
+
+        function refreshData() {
+            // Simulate data refresh
+            alert('Data refreshed successfully!');
+            location.reload();
+        }
+
+        // Data backup and restore functions
+        async function backupData() {
+            try {
+                const data = await regDB.exportTournamentData();
+
+                const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `nexx-full-backup-${new Date().toISOString().split('T')[0]}.json`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                alert('Full backup downloaded successfully!');
+            } catch (error) {
+                console.error('Failed to backup data:', error);
+                alert('Failed to backup data. Please try again.');
+            }
+        }
+
+        function restoreData() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = (e) => {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = async (e) => {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            if ((data.registrations || data.tournaments) && confirm('This will replace all current data. Continue?')) {
+                                if (data.tournaments) {
+                                    // New format with tournaments
+                                    const tournaments = JSON.parse(data.tournaments);
+                                    const registrations = JSON.parse(data.registrations);
+
+                                    // Clear and import tournaments
+                                    const tournamentTransaction = regDB.db.transaction([regDB.tournamentStoreName], 'readwrite');
+                                    const tournamentStore = tournamentTransaction.objectStore(regDB.tournamentStoreName);
+                                    await new Promise((resolve, reject) => {
+                                        const clearRequest = tournamentStore.clear();
+                                        clearRequest.onsuccess = () => resolve();
+                                        clearRequest.onerror = () => reject(clearRequest.error);
+                                    });
+
+                                    for (const tournament of tournaments) {
+                                        await new Promise((resolve, reject) => {
+                                            const request = tournamentStore.put(tournament);
+                                            request.onsuccess = () => resolve();
+                                            request.onerror = () => reject(request.error);
+                                        });
+                                    }
+
+                                    // Clear and import registrations
+                                    const registrationTransaction = regDB.db.transaction([regDB.storeName], 'readwrite');
+                                    const registrationStore = registrationTransaction.objectStore(regDB.storeName);
+                                    await new Promise((resolve, reject) => {
+                                        const clearRequest = registrationStore.clear();
+                                        clearRequest.onsuccess = () => resolve();
+                                        clearRequest.onerror = () => reject(clearRequest.error);
+                                    });
+
+                                    for (const registration of registrations) {
+                                        await new Promise((resolve, reject) => {
+                                            const request = registrationStore.put(registration);
+                                            request.onsuccess = () => resolve();
+                                            request.onerror = () => reject(request.error);
+                                        });
+                                    }
+                                } else {
+                                    // Old format with only registrations
+                                    await regDB.importData(data);
+                                }
+
+                                alert('Data restored successfully!');
+                                location.reload();
+                            }
+                        } catch (error) {
+                            alert('Invalid backup file!');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        async function clearAllData() {
+            if (confirm('Are you sure you want to delete ALL registration data? This cannot be undone!')) {
+                try {
+                    await regDB.clearAllData();
+                    alert('All data cleared!');
+                    location.reload();
+                } catch (error) {
+                    console.error('Failed to clear data:', error);
+                    alert('Failed to clear data. Please try again.');
+                }
+            }
+        }
+
+        // Simulate real-time updates
+        setInterval(() => {
+            // In a real app, this would fetch new data from server
+            console.log('Checking for updates...');
+        }, 30000);
+    </script>
+</body>
+</html>

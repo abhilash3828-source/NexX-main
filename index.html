@@ -1,0 +1,1772 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEXX Esports - Compete. Conquer. Become Legend.</title>
+    <style>
+        :root {
+            --background: #05060c;
+            --surface: #0d1120;
+            --surface-2: #121a2b;
+            --text: #e6efff;
+            --muted: rgba(255, 255, 255, 0.68);
+            --primary: #00d1ff;
+            --primary-2: #53e8ff;
+            --border: rgba(255, 255, 255, 0.12);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: radial-gradient(circle at top, rgba(0, 209, 255, 0.12), transparent 55%),
+                radial-gradient(circle at bottom, rgba(255, 255, 255, 0.07), transparent 55%),
+                var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        .navbar.scrolled {
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(10px);
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            width: 140px;
+            height: auto;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-link {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.875rem;
+            position: relative;
+            padding: 0.5rem 1rem;
+            transition: color 0.3s ease;
+        }
+
+        .nav-link:hover {
+            color: #00d1ff;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background: #00d1ff;
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .nav-link:hover::after {
+            width: 100%;
+        }
+
+        .admin-btn {
+            border: 1px solid rgba(0, 209, 255, 0.5);
+            border-radius: 9999px;
+            padding: 0.25rem 1rem;
+            color: #00d1ff;
+            text-decoration: none;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+
+        .admin-btn:hover {
+            background: rgba(0, 209, 255, 0.1);
+        }
+
+        .mobile-menu-btn {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .mobile-menu-btn span {
+            width: 24px;
+            height: 2px;
+            background: #00d1ff;
+            margin: 2px 0;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-menu {
+            display: none;
+            background: rgba(0, 0, 0, 0.9);
+            padding: 1rem;
+        }
+
+        .mobile-menu.show {
+            display: block;
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-nav-link {
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem;
+            border-radius: 0.5rem;
+            transition: background-color 0.3s ease;
+        }
+
+        .mobile-nav-link:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Hero Section */
+        .hero {
+            position: relative;
+            overflow: hidden;
+            padding: 8rem 0 5rem;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at top, rgba(0, 209, 255, 0.18), transparent 55%),
+                radial-gradient(circle at bottom, rgba(83, 232, 255, 0.14), transparent 60%);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-logo {
+            width: 200px;
+            height: auto;
+            margin-bottom: 2rem;
+        }
+
+        .hero-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 0 18px rgba(0, 209, 255, 0.56), 0 0 32px rgba(83, 232, 255, 0.18);
+        }
+
+        .hero-subtitle {
+            font-size: 1.125rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .hero-notice {
+            font-size: 0.875rem;
+            color: rgba(245, 158, 11, 0.8);
+            margin-bottom: 2rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, rgba(0, 209, 255, 0.82), rgba(83, 232, 255, 0.46));
+            border: 1px solid rgba(0, 209, 255, 0.32);
+            backdrop-filter: blur(8px);
+            box-shadow: 0 0 18px rgba(0, 209, 255, 0.25);
+            color: white;
+            text-decoration: none;
+            padding: 0.75rem 2rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 24px rgba(0, 209, 255, 0.4), 0 0 40px rgba(83, 232, 255, 0.2);
+            transform: scale(1.02);
+        }
+
+        .btn-secondary {
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            padding: 0.75rem 2rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.875rem;
+            transition: background-color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* Sections */
+        .section {
+            padding: 6rem 0;
+        }
+
+        .section-glow {
+            position: relative;
+        }
+
+        .section-glow::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 20% 30%, rgba(0, 209, 255, 0.15), transparent 55%),
+                radial-gradient(circle at 80% 60%, rgba(83, 232, 255, 0.1), transparent 60%);
+            opacity: 0.95;
+            pointer-events: none;
+        }
+
+        .section-title {
+            font-size: 2.25rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+            margin-bottom: 2rem;
+        }
+
+        /* About Section */
+        .about-grid {
+            display: grid;
+            gap: 2.5rem;
+            align-items: center;
+        }
+
+        .about-content h2 {
+            font-size: 1.875rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .about-text {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1.125rem;
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .about-highlight {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+        }
+
+        .about-buttons {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .stats-grid {
+            display: grid;
+            gap: 1rem;
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+        }
+
+        .stat-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 1.5rem;
+        }
+
+        .stats-list {
+            display: grid;
+            gap: 0.75rem;
+        }
+
+        .stat-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .stat-value {
+            color: white;
+            font-weight: 600;
+        }
+
+        /* Tournaments */
+        .tournaments-grid {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2.5rem;
+        }
+
+        .tournament-card {
+            background: #0b0f1a;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            transition: transform 0.3s ease;
+        }
+
+        .tournament-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .tournament-image {
+            width: 100%;
+            height: 200px;
+            background: linear-gradient(135deg, #1a1a2e, #16213e);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.875rem;
+            position: relative;
+        }
+
+        .tournament-image::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.8), transparent);
+        }
+
+        .tournament-badge {
+            position: absolute;
+            bottom: 1rem;
+            left: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(4px);
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .tournament-content {
+            padding: 1.5rem;
+        }
+
+        .tournament-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .tournament-desc {
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.875rem;
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+
+        .tournament-details {
+            display: grid;
+            gap: 0.75rem;
+            grid-template-columns: 1fr 1fr;
+            margin-bottom: 1.25rem;
+        }
+
+        .detail-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 0.75rem;
+            padding: 0.75rem;
+        }
+
+        .detail-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: rgba(255, 255, 255, 0.5);
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: white;
+        }
+
+        .tournament-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .tournament-date {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .tournament-btn {
+            padding: 0.5rem 1.25rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .tournament-btn.register {
+            background: linear-gradient(135deg, rgba(0, 209, 255, 0.82), rgba(83, 232, 255, 0.46));
+            border: 1px solid rgba(0, 209, 255, 0.32);
+            box-shadow: 0 0 18px rgba(0, 209, 255, 0.25);
+            color: white;
+        }
+
+        .tournament-btn.register:hover {
+            box-shadow: 0 0 24px rgba(0, 209, 255, 0.4);
+            transform: scale(1.02);
+        }
+
+        .tournament-btn.full {
+            background: rgba(255, 255, 255, 0.1);
+            color: rgba(255, 255, 255, 0.4);
+            cursor: not-allowed;
+        }
+
+        /* Past Tournaments */
+        .past-tournaments {
+            display: grid;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .past-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 1.5rem;
+        }
+
+        .past-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .past-info {
+            font-size: 0.875rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 1rem;
+        }
+
+        .past-link {
+            color: #53e8ff;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .past-link:hover {
+            color: #00d1ff;
+        }
+
+        /* Sponsors */
+        .sponsors-grid {
+            display: grid;
+            gap: 1.5rem;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            margin-top: 2.5rem;
+        }
+
+        .sponsor-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 1rem;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .sponsor-name {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.5rem;
+        }
+
+        .sponsor-role {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(0, 0, 0, 0.6);
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 3rem 0 2rem;
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .footer-content {
+            display: grid;
+            gap: 2.5rem;
+        }
+
+        .footer-brand h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-brand p {
+            font-size: 0.875rem;
+            line-height: 1.6;
+            color: rgba(255, 255, 255, 0.7);
+            margin-bottom: 0.75rem;
+            max-width: 300px;
+        }
+
+        .footer-copyright {
+            font-size: 0.75rem;
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .footer-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 2rem;
+        }
+
+        .footer-section h4 {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 0.75rem;
+        }
+
+        .footer-list {
+            list-style: none;
+        }
+
+        .footer-list li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-list a {
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            font-size: 0.875rem;
+            transition: color 0.3s ease;
+        }
+
+        .footer-list a:hover {
+            color: white;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .mobile-menu-btn {
+                display: flex;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tournaments-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .past-tournaments {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-content {
+                grid-template-columns: 1fr;
+            }
+
+            .footer-links {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+        }
+
+        @media (min-width: 769px) {
+            .about-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+
+            .tournaments-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .past-tournaments {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+
+    <style>
+        /* Registration Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(4px);
+        }
+
+        .modal.show {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal-content {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: 1rem;
+            width: 90%;
+            max-width: 500px;
+            max-height: 90vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--text);
+        }
+
+        .modal-close {
+            background: none;
+            border: none;
+            color: var(--muted);
+            font-size: 1.5rem;
+            cursor: pointer;
+            padding: 0.25rem;
+            border-radius: 0.25rem;
+        }
+
+        .modal-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: var(--text);
+        }
+
+        .modal-body {
+            padding: 1.5rem;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--text);
+            font-size: 0.875rem;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 2px rgba(0, 209, 255, 0.2);
+        }
+
+        .form-select {
+            width: 100%;
+            padding: 0.75rem;
+            background: var(--surface-2);
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            color: var(--text);
+            font-size: 0.875rem;
+        }
+
+        .form-select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .payment-options {
+            display: none;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .payment-option {
+            border: 1px solid var(--border);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .payment-option:hover {
+            border-color: var(--primary);
+            background: rgba(0, 209, 255, 0.05);
+        }
+
+        .payment-option.selected {
+            border-color: var(--primary);
+            background: rgba(0, 209, 255, 0.1);
+        }
+
+        .payment-icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .payment-label {
+            font-size: 0.875rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        .modal-footer {
+            padding: 1.5rem;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 1rem;
+        }
+
+        .btn-secondary {
+            flex: 1;
+            background: var(--surface-2);
+            color: var(--text);
+            border: 1px solid var(--border);
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-primary {
+            flex: 1;
+            background: linear-gradient(135deg, rgba(0, 209, 255, 0.82), rgba(83, 232, 255, 0.46));
+            border: 1px solid rgba(0, 209, 255, 0.32);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            box-shadow: 0 0 18px rgba(0, 209, 255, 0.25);
+        }
+
+        .btn-primary:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Style anchor tags as buttons */
+        a.btn-primary {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            text-decoration: none;
+            flex: 1;
+        }
+
+        a.btn-primary:hover {
+            box-shadow: 0 0 18px rgba(0, 209, 255, 0.25);
+            color: white;
+            text-decoration: none;
+        }
+
+        /* Pay Now button styling */
+        .btn-pay {
+            display: block !important;
+            width: 100% !important;
+            flex: none !important;
+            text-align: center;
+        }
+
+        .btn-pay:hover {
+            box-shadow: 0 0 18px rgba(0, 209, 255, 0.25);
+        }
+
+        /* Success Message */
+        .success-message {
+            text-align: center;
+            padding: 2rem;
+        }
+
+        .success-icon {
+            font-size: 3rem;
+            color: #10b981;
+            margin-bottom: 1rem;
+        }
+
+        .success-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: var(--text);
+            margin-bottom: 0.5rem;
+        }
+
+        .success-text {
+            color: var(--muted);
+            margin-bottom: 1.5rem;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-content">
+            <a href="#home" class="logo-link">
+                <img src="images/logo2.png" alt="NEXX Esports" class="logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjkwIiB2aWV3Qm94PSIwIDAgMjAwIDkwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjkwIiBmaWxsPSIjMDAxMTIwIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzAwZDFmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+ TkVYWCBFc3BvcnRzPC90ZXh0Pgo8L3N2Zz4K'">
+            </a>
+
+            <div class="nav-links">
+                <a href="#home" class="nav-link">Home</a>
+                <a href="#events" class="nav-link">Events</a>
+                <a href="#about" class="nav-link">About</a>
+                <a href="#sponsors" class="nav-link">Sponsors</a>
+                <a href="admin.html" class="admin-btn">Admin</a>
+            </div>
+
+            <button class="mobile-menu-btn" id="mobile-menu-btn">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+
+        <div class="mobile-menu" id="mobile-menu">
+            <div class="mobile-nav-links">
+                <a href="#home" class="mobile-nav-link">Home</a>
+                <a href="#events" class="mobile-nav-link">Events</a>
+                <a href="#about" class="mobile-nav-link">About</a>
+                <a href="#sponsors" class="mobile-nav-link">Sponsors</a>
+                <a href="admin.html" class="mobile-nav-link admin-btn" style="border: 1px solid rgba(0, 209, 255, 0.5); border-radius: 0.5rem; margin-top: 0.5rem;">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container hero-content">
+            <img src="images/logo2.svg" alt="NEXX Esports" class="hero-logo" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjkwIiB2aWV3Qm94PSIwIDAgMjAwIDkwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMjAwIiBoZWlnaHQ9IjkwIiBmaWxsPSIjMDAxMTIwIi8+Cjx0ZXh0IHg9IjEwMCIgeT0iNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCwgc2Fucy1zZXJpZiIgZm9udC1zaXplPSIxNCIgZmlsbD0iIzAwZDFmZiIgdGV4dC1hbmNob3I9Im1pZGRsZSI+IE5FWFggRXNwb3J0czwvdGV4dD4KPC9zdmc+'">
+            <h1 class="hero-title">Compete. Conquer. Become Legend.</h1>
+            <p class="hero-subtitle">
+                The competitive arena for rising stars. Sign up for tournaments, track your progress, and join a community that plays to win.
+            </p>
+            <p class="hero-notice">
+                <small>✅ Registration data is permanently stored and will persist across browser sessions.</small>
+            </p>
+            <div class="hero-buttons">
+                <a href="#events" class="btn-primary">View Upcoming Tournaments</a>
+                <a href="#about" class="btn-secondary">Learn about NEXX</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="section section-glow" id="about">
+        <div class="container">
+            <div class="about-grid">
+                <div class="about-content">
+                    <h2>What is NEXX Esports?</h2>
+                    <p class="about-text">
+                        NEXX Esports is the home of competitive gaming. We host weekly tournaments, provide live leaderboards,
+                        and support players across all skill levels. Compete in solo or team formats and win exclusive rewards.
+                    </p>
+                    <p class="about-highlight">
+                        Built for the community, by gamers. Our platform uses lightweight UPI payment flows so you keep more money
+                        in your pocket.
+                    </p>
+                    <div class="about-buttons">
+                        <a href="#events" class="btn-primary">Explore Tournaments</a>
+                        <a href="https://discord.gg/your-server" target="_blank" rel="noopener" class="btn-secondary">Join Discord</a>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h3 class="stat-title">Community stats</h3>
+                        <div class="stats-list">
+                            <div class="stat-item"><span class="stat-value">500+</span> Active players</div>
+                            <div class="stat-item"><span class="stat-value">35</span> Tournaments held</div>
+                            <div class="stat-item"><span class="stat-value">12k+</span> Matches played</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-card">
+                        <h3 class="stat-title">Trust & credibility</h3>
+                        <ul class="stats-list" style="list-style: none; padding: 0;">
+                            <li class="stat-item">✅ Secure UPI payment with manual verification</li>
+                            <li class="stat-item">✅ Transparent tournament rules & leaderboard</li>
+                            <li class="stat-item">✅ 24/7 admin support on Discord</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Upcoming Tournaments -->
+    <section class="section" id="events">
+        <div class="container">
+            <h2 class="section-title">Upcoming tournaments</h2>
+            <p class="section-subtitle">Register early — seats are limited and fill fast.</p>
+
+            <div class="tournaments-grid">
+                <!-- Free Fire Tournament -->
+                <div class="tournament-card">
+                    <div class="tournament-image">
+                        <span>Free Fire Tournament</span>
+                        <div class="tournament-badge">Free Fire</div>
+                    </div>
+                    <div class="tournament-content">
+                        <h3 class="tournament-title">Free Fire Solo Showdown</h3>
+                        <p class="tournament-desc">Fast-paced solo action. Top 10 earn bonuses and a spot on the NEXX leaderboard.</p>
+                        <div class="tournament-details">
+                            <div class="detail-card">
+                                <div class="detail-label">Entry</div>
+                                <div class="detail-value">₹20</div>
+                            </div>
+                            <div class="detail-card">
+                                <div class="detail-label">Slots</div>
+                                <div class="detail-value">1 / 50</div>
+                            </div>
+                        </div>
+                        <div class="tournament-footer">
+                            <div class="tournament-date">Mar 28</div>
+                            <a href="#register" class="tournament-btn register">Register</a>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div style="text-align: center; margin-top: 2.5rem;">
+                <a href="#events" class="btn-primary">View all tournaments</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Past Tournaments -->
+    <section class="section section-glow">
+        <div class="container">
+            <h2 class="section-title">Past tournaments</h2>
+            <p class="section-subtitle">See what our community has won.</p>
+
+            <div class="past-tournaments">
+                <div class="past-card">
+                    <h3 class="past-title">NEXX Free Fire Cup</h3>
+                    <p class="past-info">Winner: ShadowNinja</p>
+                    <p class="past-info">Players: 260</p>
+                    <a href="#" class="past-link">View recap →</a>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Sponsors -->
+    <section class="section" id="sponsors">
+        <div class="container">
+            <h2 class="section-title">Our sponsors</h2>
+            <p class="section-subtitle">Proudly supported by brands that power competitive play.</p>
+
+            <div class="sponsors-grid">
+                <div class="sponsor-card">
+                    <p class="sponsor-name">Apex Gear</p>
+                    <p class="sponsor-role">Official partner</p>
+                </div>
+                <div class="sponsor-card">
+                    <p class="sponsor-name">Glitch Labs</p>
+                    <p class="sponsor-role">Official partner</p>
+                </div>
+                <div class="sponsor-card">
+                    <p class="sponsor-name">Storm Audio</p>
+                    <p class="sponsor-role">Official partner</p>
+                </div>
+                <div class="sponsor-card">
+                    <p class="sponsor-name">CyberFuel</p>
+                    <p class="sponsor-role">Official partner</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <h3>NEXX Esports</h3>
+                    <p>
+                        Join the fastest growing competitive community. Play with friends, win prizes, and show the world what you are
+                        made of.
+                    </p>
+                    <p class="footer-copyright">&copy; 2026 NEXX Esports. All rights reserved.</p>
+                </div>
+
+                <div class="footer-links">
+                    <div class="footer-section">
+                        <h4>Quick links</h4>
+                        <ul class="footer-list">
+                            <li><a href="#events">Upcoming tournaments</a></li>
+                            <li><a href="#home">Past tournaments</a></li>
+                            <li><a href="#contact">Contact</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Support</h4>
+                        <ul class="footer-list">
+                            <li><a href="mailto:support@nexxesports.com">support@nexxesports.com</a></li>
+                            <li><a href="#privacy">Privacy Policy</a></li>
+                            <li><a href="#terms">Terms & Conditions</a></li>
+                        </ul>
+                    </div>
+
+                    <div class="footer-section">
+                        <h4>Community</h4>
+                        <ul class="footer-list">
+                            <li><a href="https://discord.gg/your-server" target="_blank" rel="noopener">Discord</a></li>
+                            <li><a href="https://twitter.com/nexxesports" target="_blank" rel="noopener">Twitter</a></li>
+                            <li><a href="https://instagram.com/nexxesports" target="_blank" rel="noopener">Instagram</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Registration Modal -->
+    <div id="registrationModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title">Register for Tournament</h2>
+                <button class="modal-close" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="registrationForm">
+                    <div class="form-group">
+                        <label class="form-label">Full Name *</label>
+                        <input type="text" class="form-input" id="fullName" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Email Address *</label>
+                        <input type="email" class="form-input" id="email" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Phone Number *</label>
+                        <input type="tel" class="form-input" id="phone" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Game ID / Username *</label>
+                        <input type="text" class="form-input" id="gameId" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label">Select Tournament *</label>
+                        <select class="form-select" id="tournament" required>
+                            <option value="">Choose a tournament</option>
+                            <option value="freefire-solo">Free Fire Solo Showdown - ₹20</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <a href="https://pay.mypaylink.in/?q=Xezyjz" target="_blank" class="btn-primary btn-pay" id="payBtn" onclick="markPaymentDone(event)">💳 Pay Now - ₹20</a>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn-secondary" onclick="closeModal()">Cancel</button>
+                <button class="btn-primary" onclick="completeRegistration()" id="registerBtn" disabled>Register</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Modal -->
+    <div id="successModal" class="modal">
+        <div class="modal-content">
+            <div class="success-message">
+                <div class="success-icon">✅</div>
+                <h2 class="success-title">Registration Successful!</h2>
+                <p class="success-text">Your registration has been submitted. Please complete the payment to confirm your spot.</p>
+                <button class="btn-primary" onclick="closeModal()">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // IndexedDB for more persistent storage
+        class RegistrationDB {
+            constructor() {
+                this.dbName = 'NexxRegistrations';
+                this.version = 1;
+                this.storeName = 'registrations';
+                this.tournamentStoreName = 'tournaments';
+                this.db = null;
+            }
+
+            async init() {
+                return new Promise((resolve, reject) => {
+                    const request = indexedDB.open(this.dbName, this.version);
+
+                    request.onerror = () => reject(request.error);
+                    request.onsuccess = () => {
+                        this.db = request.result;
+                        resolve();
+                    };
+
+                    request.onupgradeneeded = (event) => {
+                        const db = event.target.result;
+                        if (!db.objectStoreNames.contains(this.storeName)) {
+                            db.createObjectStore(this.storeName, { keyPath: 'id' });
+                        }
+                        if (!db.objectStoreNames.contains(this.tournamentStoreName)) {
+                            db.createObjectStore(this.tournamentStoreName, { keyPath: 'id' });
+                        }
+                    };
+                });
+            }
+
+            async saveRegistration(registration) {
+                if (!this.db) await this.init();
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readwrite');
+                    const store = transaction.objectStore(this.storeName);
+                    const request = store.put(registration);
+
+                    request.onsuccess = () => resolve();
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async getAllRegistrations() {
+                if (!this.db) await this.init();
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readonly');
+                    const store = transaction.objectStore(this.storeName);
+                    const request = store.getAll();
+
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async getAllTournaments() {
+                if (!this.db) await this.init();
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.tournamentStoreName], 'readonly');
+                    const store = transaction.objectStore(this.tournamentStoreName);
+                    const request = store.getAll();
+
+                    request.onsuccess = () => resolve(request.result);
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async updateRegistration(id, updates) {
+                if (!this.db) await this.init();
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readwrite');
+                    const store = transaction.objectStore(this.storeName);
+
+                    const getRequest = store.get(id);
+                    getRequest.onsuccess = () => {
+                        const registration = getRequest.result;
+                        if (registration) {
+                            Object.assign(registration, updates);
+                            const putRequest = store.put(registration);
+                            putRequest.onsuccess = () => resolve();
+                            putRequest.onerror = () => reject(putRequest.error);
+                        } else {
+                            reject(new Error('Registration not found'));
+                        }
+                    };
+                    getRequest.onerror = () => reject(getRequest.error);
+                });
+            }
+
+            async clearAllData() {
+                if (!this.db) await this.init();
+                return new Promise((resolve, reject) => {
+                    const transaction = this.db.transaction([this.storeName], 'readwrite');
+                    const store = transaction.objectStore(this.storeName);
+                    const request = store.clear();
+
+                    request.onsuccess = () => resolve();
+                    request.onerror = () => reject(request.error);
+                });
+            }
+
+            async exportData() {
+                const registrations = await this.getAllRegistrations();
+                return {
+                    registrations: JSON.stringify(registrations),
+                    backupDate: new Date().toISOString(),
+                    version: '1.0',
+                    storage: 'IndexedDB'
+                };
+            }
+
+            async importData(data) {
+                if (!this.db) await this.init();
+                const registrations = JSON.parse(data.registrations);
+
+                const transaction = this.db.transaction([this.storeName], 'readwrite');
+                const store = transaction.objectStore(this.storeName);
+
+                // Clear existing data
+                await new Promise((resolve, reject) => {
+                    const clearRequest = store.clear();
+                    clearRequest.onsuccess = () => resolve();
+                    clearRequest.onerror = () => reject(clearRequest.error);
+                });
+
+                // Import new data
+                for (const reg of registrations) {
+                    await new Promise((resolve, reject) => {
+                        const request = store.put(reg);
+                        request.onsuccess = () => resolve();
+                        request.onerror = () => reject(request.error);
+                    });
+                }
+            }
+        }
+
+        // Initialize database
+        const regDB = new RegistrationDB();
+
+        // Mobile menu toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        const navbar = document.getElementById('navbar');
+
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('show');
+        });
+
+        // Close mobile menu when clicking a link
+        document.querySelectorAll('.mobile-nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.remove('show');
+            });
+        });
+
+        // Navbar scroll effect
+        window.addEventListener('scroll', () => {
+            if (window.scrollY > 40) {
+                navbar.classList.add('scrolled');
+            } else {
+                navbar.classList.remove('scrolled');
+            }
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Registration Modal Functions
+        let selectedPayment = '';
+        let selectedTournament = '';
+        let paymentCompleted = false;
+
+        async function openRegistrationModal() {
+            await populateTournamentDropdown();
+            paymentCompleted = false;
+            document.getElementById('registerBtn').disabled = true;
+            document.getElementById('registrationModal').classList.add('show');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function markPaymentDone(event) {
+            // Don't prevent default, allow the link to open
+            paymentCompleted = true;
+            document.getElementById('registerBtn').disabled = false;
+        }
+
+        function closeModal() {
+            document.getElementById('registrationModal').classList.remove('show');
+            document.getElementById('successModal').classList.remove('show');
+            document.body.style.overflow = 'auto';
+            resetForm();
+        }
+
+        function resetForm() {
+            document.getElementById('registrationForm').reset();
+            selectedPayment = '';
+            selectedTournament = '';
+            paymentCompleted = false;
+            document.getElementById('registerBtn').disabled = true;
+        }
+
+        async function completeRegistration() {
+            if (!paymentCompleted) {
+                alert('Please click on "Pay Now" button first to complete the payment.');
+                return;
+            }
+
+            const form = document.getElementById('registrationForm');
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+
+            const formData = {
+                id: Date.now().toString(),
+                fullName: document.getElementById('fullName').value,
+                email: document.getElementById('email').value,
+                phone: document.getElementById('phone').value,
+                gameId: document.getElementById('gameId').value,
+                tournament: document.getElementById('tournament').value,
+                paymentMethod: 'external_link',
+                amount: 20,
+                status: 'pending',
+                timestamp: new Date().toISOString()
+            };
+
+            // Validate required fields
+            if (!formData.fullName || !formData.email || !formData.phone || !formData.gameId || !formData.tournament) {
+                alert('Please fill in all required fields');
+                return;
+            }
+
+            try {
+                // Store registration locally
+                await saveRegistration(formData);
+                showSuccess();
+            } catch (error) {
+                console.error('Failed to register:', error);
+                alert('Failed to register. Please try again.');
+            }
+        }
+
+        async function saveRegistration(registration) {
+            try {
+                await regDB.saveRegistration(registration);
+                console.log('Registration saved to IndexedDB');
+            } catch (error) {
+                console.error('Failed to save registration:', error);
+                // Fallback to localStorage if IndexedDB fails
+                const registrations = JSON.parse(localStorage.getItem('nexx_registrations') || '[]');
+                registrations.push(registration);
+                localStorage.setItem('nexx_registrations', JSON.stringify(registrations));
+            }
+        }
+
+        async function getApprovedCount(tournamentId) {
+            try {
+                const registrations = await regDB.getAllRegistrations();
+                return registrations.filter(reg => reg.tournament === tournamentId && reg.status === 'approved').length;
+            } catch (error) {
+                console.error('Failed to get registrations from IndexedDB:', error);
+                // Fallback to localStorage
+                const registrations = JSON.parse(localStorage.getItem('nexx_registrations') || '[]');
+                return registrations.filter(reg => reg.tournament === tournamentId && reg.status === 'approved').length;
+            }
+        }
+
+        function initiateUPIPayment(formData) {
+            // UPI URL format: upi://pay?pa=UPI_ID&pn=NAME&am=AMOUNT&cu=INR&tn=DESCRIPTION
+            const upiUrl = `upi://pay?pa=nexxesports@upi&pn=NEXX%20Esports&am=${formData.amount}&cu=INR&tn=Tournament%20Registration%20-%20${formData.tournament}`;
+
+            // Try to open UPI app
+            window.location.href = upiUrl;
+
+            // Show success message after a delay (simulating payment completion)
+            setTimeout(() => {
+                showSuccess();
+            }, 2000);
+        }
+
+        function showSuccess() {
+            document.getElementById('registrationModal').classList.remove('show');
+            document.getElementById('successModal').classList.add('show');
+        }
+
+        // Add click handlers to register buttons
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Do NOT load tournaments automatically - keep slots manual
+            // await loadTournaments();
+
+            // Find all register buttons and add click handlers
+            document.querySelectorAll('.tournament-btn.register, a[href="#register"]').forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    openRegistrationModal();
+                });
+            });
+
+            // Do NOT update slot counts automatically
+            // updateSlotCounts();
+        });
+
+        async function loadTournaments() {
+            try {
+                const tournaments = await regDB.getAllTournaments();
+                const tournamentGrid = document.querySelector('.tournament-grid');
+
+                if (!tournamentGrid) return; // If no tournament grid exists, skip
+
+                if (tournaments.length === 0) {
+                    // Show default tournament if no tournaments exist
+                    tournamentGrid.innerHTML = `
+                        <div class="tournament-card">
+                            <div class="tournament-header">
+                                <h3>Free Fire Solo Championship</h3>
+                                <div class="tournament-meta">
+                                    <span class="prize">₹20 Entry</span>
+                                    <span class="slots" id="freefire-slots">3 / 50</span>
+                                </div>
+                            </div>
+                            <div class="tournament-description">
+                                <p>Compete in the ultimate solo battle royale tournament. Show your skills and become the champion!</p>
+                                <ul>
+                                    <li>Solo battle royale format</li>
+                                    <li>50 player slots available</li>
+                                    <li>₹20 entry fee</li>
+                                    <li>Exciting prizes for winners</li>
+                                </ul>
+                            </div>
+                            <div class="tournament-actions">
+                                <button class="tournament-btn register" onclick="selectTournament('freefire-solo')">Register Now</button>
+                                <button class="tournament-btn secondary">View Details</button>
+                            </div>
+                        </div>
+                    `;
+                    return;
+                }
+
+                // Display dynamic tournaments
+                tournamentGrid.innerHTML = tournaments
+                    .filter(tournament => tournament.status === 'active')
+                    .map(tournament => `
+                        <div class="tournament-card">
+                            <div class="tournament-header">
+                                <h3>${tournament.name}</h3>
+                                <div class="tournament-meta">
+                                    <span class="prize">₹${tournament.entryFee} Entry</span>
+                                    <span class="slots" id="${tournament.id}-slots">${getApprovedCount(tournament.id)} / ${tournament.maxSlots}</span>
+                                </div>
+                            </div>
+                            <div class="tournament-description">
+                                <p>${tournament.description || `Compete in ${tournament.gameName} tournament and win exciting prizes!`}</p>
+                                <ul>
+                                    <li>${tournament.gameName} tournament</li>
+                                    <li>${tournament.maxSlots} player slots available</li>
+                                    <li>₹${tournament.entryFee} entry fee</li>
+                                    <li>Starts: ${new Date(tournament.startDate).toLocaleDateString()}</li>
+                                </ul>
+                            </div>
+                            <div class="tournament-actions">
+                                <button class="tournament-btn register" onclick="selectTournament('${tournament.id}')">Register Now</button>
+                                <button class="tournament-btn secondary">View Details</button>
+                            </div>
+                        </div>
+                    `).join('');
+
+            } catch (error) {
+                console.error('Failed to load tournaments:', error);
+                // Fallback to default tournament
+                const tournamentGrid = document.querySelector('.tournament-grid');
+                if (tournamentGrid) {
+                    tournamentGrid.innerHTML = `
+                        <div class="tournament-card">
+                            <div class="tournament-header">
+                                <h3>Free Fire Solo Championship</h3>
+                                <div class="tournament-meta">
+                                    <span class="prize">₹20 Entry</span>
+                                    <span class="slots" id="freefire-slots">5/ 50</span>
+                                </div>
+                            </div>
+                            <div class="tournament-description">
+                                <p>Compete in the ultimate solo battle royale tournament. Show your skills and become the champion!</p>
+                                <ul>
+                                    <li>Solo battle royale format</li>
+                                    <li>50 player slots available</li>
+                                    <li>₹20 entry fee</li>
+                                    <li>Exciting prizes for winners</li>
+                                </ul>
+                            </div>
+                            <div class="tournament-actions">
+                                <button class="tournament-btn register" onclick="selectTournament('freefire-solo')">Register Now</button>
+                                <button class="tournament-btn secondary">View Details</button>
+                            </div>
+                        </div>
+                    `;
+                }
+            }
+        }
+
+        async function populateTournamentDropdown() {
+            try {
+                const tournaments = await regDB.getAllTournaments();
+                const selectElement = document.getElementById('tournament');
+
+                // Clear existing options except the first one
+                selectElement.innerHTML = '<option value="">Choose a tournament</option>';
+
+                if (tournaments.length === 0) {
+                    // Add default tournament
+                    const option = document.createElement('option');
+                    option.value = 'freefire-solo';
+                    option.textContent = 'Free Fire Solo Showdown - ₹20';
+                    selectElement.appendChild(option);
+                    return;
+                }
+
+                // Add dynamic tournaments
+                tournaments
+                    .filter(tournament => tournament.status === 'active')
+                    .forEach(tournament => {
+                        const option = document.createElement('option');
+                        option.value = tournament.id;
+                        option.textContent = `${tournament.name} - ₹${tournament.entryFee}`;
+                        selectElement.appendChild(option);
+                    });
+
+            } catch (error) {
+                console.error('Failed to populate tournament dropdown:', error);
+                // Fallback to default tournament
+                const selectElement = document.getElementById('tournament');
+                selectElement.innerHTML = '<option value="">Choose a tournament</option><option value="freefire-solo">Free Fire Solo Showdown - ₹20</option>';
+            }
+        }
+
+        async function updateSlotCounts() {
+            try {
+                const tournaments = await regDB.getAllTournaments();
+
+                if (tournaments.length === 0) {
+                    // Handle default tournament
+                    const freefireCount = await getApprovedCount('freefire-solo');
+                    const freefireSlotElement = document.getElementById('freefire-slots');
+                    if (freefireSlotElement) {
+                        freefireSlotElement.textContent = freefireCount + ' / 50';
+                    }
+                    return;
+                }
+
+                // Update slots for all tournaments
+                for (const tournament of tournaments) {
+                    const count = await getApprovedCount(tournament.id);
+                    const slotElement = document.getElementById(`${tournament.id}-slots`);
+                    if (slotElement) {
+                        slotElement.textContent = `${count} / ${tournament.maxSlots}`;
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to update slot counts:', error);
+                // Fallback for default tournament
+                const freefireCount = await getApprovedCount('freefire-solo');
+                const freefireSlotElement = document.getElementById('freefire-slots');
+                if (freefireSlotElement) {
+                    freefireSlotElement.textContent = freefireCount + ' / 50';
+                }
+            }
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('registrationModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        document.getElementById('successModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeModal();
+            }
+        });
+
+        // Listen for registration updates from admin panel
+        window.addEventListener('message', async function(event) {
+            if (event.data.type === 'registrationUpdated') {
+                updateSlotCounts();
+            } else if (event.data.type === 'tournamentsUpdated') {
+                await loadTournaments();
+                updateSlotCounts();
+            }
+        });
+
+        // Data validation - check if data is still available
+        function validateDataIntegrity() {
+            const registrations = JSON.parse(localStorage.getItem('nexx_registrations') || '[]');
+            const approvedCount = registrations.filter(reg => reg.status === 'approved').length;
+
+            // Check if slot counts match actual data
+            const displayedSlots = document.querySelectorAll('.slot-count');
+            let dataMismatch = false;
+
+            displayedSlots.forEach(slot => {
+                const tournamentId = slot.closest('.tournament-card').dataset.tournament;
+                const actualCount = getApprovedCount(tournamentId);
+                const displayedCount = parseInt(slot.textContent);
+
+                if (actualCount !== displayedCount) {
+                    dataMismatch = true;
+                }
+            });
+
+            if (dataMismatch) {
+                console.warn('Data integrity issue detected - refreshing slot counts');
+                updateSlotCounts();
+            }
+        }
+
+        // Check data integrity every 30 seconds
+        setInterval(validateDataIntegrity, 30000);
+
+        // Also check when page becomes visible (user returns to tab)
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                validateDataIntegrity();
+            }
+        });
+    </script>
+</body>
+</html>

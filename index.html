@@ -1177,7 +1177,7 @@
                 <button class="modal-close" onclick="closeModal()">&times;</button>
             </div>
             <div class="modal-body">
-                <form id="registrationForm">
+                <form id="registrationForm" action="https://script.google.com/macros/s/AKfycbwMvtDjkN1QLDxSe00gr2wQ5hT3xFov3BjFimAtNitCli0JCjjR4C5AvGV7ho0SQ7Ceew/exec" method="POST">
                     <div class="form-group">
                         <label class="form-label">Full Name *</label>
                         <input type="text" class="form-input" id="fullName" required>
@@ -1482,21 +1482,16 @@
                 // Send to Google Sheets
                 await sendToGoogleSheets(formData);
 
-                showSuccess();
+                showSuccess();       
             } catch (error) {
                 console.error('Failed to register:', error);
                 alert('Failed to register. Please try again.');
             }
         }
 
-        const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxWOaJ5T7sWZpiQ62amwyTl9Xh6EzHxddupYf9iRACGvQRenrnxy5wv2Yx3rS12IX3r4A/exec'; // e.g. https://script.google.com/macros/s/XXX/exec
+        const GOOGLE_SHEETS_WEBHOOK_URL = 'https://script.google.com/macros/s/AKfycbxWOaJ5T7sWZpiQ62amwyTl9Xh6EzHxddupYf9iRACGvQRenrnxy5wv2Yx3rS12IX3r4A/exec';
 
         async function sendToGoogleSheets(registration) {
-            if (!GOOGLE_SHEETS_WEBHOOK_URL || GOOGLE_SHEETS_WEBHOOK_URL.includes('PASTE_YOUR_GAS_WEB_APP_URL_HERE')) {
-                console.warn('Google Sheets webhook URL not configured. Skipping push to Sheets.');
-                return;
-            }
-
             try {
                 const response = await fetch(GOOGLE_SHEETS_WEBHOOK_URL, {
                     method: 'POST',
